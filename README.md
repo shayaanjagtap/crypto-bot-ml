@@ -18,9 +18,12 @@ Run the bot
 `./run.py`
 
 ### Saved Files & Data Structures ###
-- `thing1` - a thing that does stuff.
+- `config.json` - configuration options for files, model parameters.
 
 ### Important Files ###
+- `run.py` - main script, controls the model training and etl pipeline.
+- `lstm.py` - LSTM built in Keras.
+- `etl.py` - ETL pipeline class for standardizing the data.
 
 
 This project is inspired by and build upon this project

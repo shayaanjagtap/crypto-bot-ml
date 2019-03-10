@@ -1,39 +1,37 @@
-
 import h5py
 import numpy as np
 import pandas as pd
 
 class ETL:
-    '''
-    ETL relevant processing methods
-    '''
+	"""Extract Transform Load class for all data operations pre model inputs. Data is read in generative way to allow for large datafiles and low memory utilisation"""
 
-    def generate_clean_data(self, filename, batch_size=1000, start_index=0):
-        with h5py.File(filename, 'r') as hf:
-            i = start_index
-            while True:
-                data_x = hf['x'][i:i+batch_size]
-                data_y = hf['y'][i:i+batch_size]
-                i += batch_size
-                yield(data_x, data_y)
+	def generate_clean_data(self, filename, batch_size=1000, start_index=0):
+		with h5py.File(filename, 'r') as hf:
+			i = start_index
+			while True:
+				data_x = hf['x'][i:i+batch_size]
+				data_y = hf['y'][i:i+batch_size]
+				i += batch_size
+				yield (data_x, data_y)
 
-    def create_clean_datafile(self, filename_in, filename_out, batch_size=1000, z_window_size=100, y_window_size=1, y_col=0, filter_cols=None, normalize=True):
-        '''
-        incrementally save a datafile of clean data to load straight into the model
-        '''
-        print('> creating x and y data files...')
-        data_gen = self.clean_data(
-            filename_in,
-            batch_size = batch_size,
-            x_window_sie = x_window_size,
-            y_col = y_col,
+	def create_clean_datafile(self, filename_in, filename_out, batch_size=1000, x_window_size=100, y_window_size=1, y_col=0, filter_cols=None, normalise=True):
+		"""Incrementally save a datafile of clean data ready for loading straight into model"""
+		print('> Creating x & y data files...')
+
+		data_gen = self.clean_data(
+			filename_in,
+			batch_size = batch_size,
+			x_window_size = x_window_size,
+			y_window_size = y_window_size,
+			y_col = y_col,
 			filter_cols = filter_cols,
-			normalize = normalize
-            )
+			normalise = True
+		)
 
-        i = 0
-        with h5py.File(filename_out, 'w') as hf:
-            x1, y1 = next(data_gen)
+		i = 0
+		with h5py.File(filename_out, 'w') as hf:
+			x1, y1 = next(data_gen)
+			#Initialise hdf5 x, y datasets with first chunk of data
 			rcount_x = x1.shape[0]
 			dset_x = hf.create_dataset('x', shape=x1.shape, maxshape=(None, x1.shape[1], x1.shape[2]), chunks=True)
 			dset_x[:] = x1
@@ -52,8 +50,7 @@ class ETL:
 				rcount_y += y_batch.shape[0]
 				i += 1
 
-
-        print('> Clean datasets created in file `' + filename_out + '.h5`')
+		print('> Clean datasets created in file `' + filename_out + '.h5`')
 
 	def clean_data(self, filepath, batch_size, x_window_size, y_window_size, y_col, filter_cols, normalise):
 		"""Cleans and Normalises the data in batches `batch_size` at a time"""

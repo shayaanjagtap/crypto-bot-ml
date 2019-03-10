@@ -1,11 +1,20 @@
+#!/usr/bin/env python
+
 import time
+import json
+import h5py
 import threading
-import lstm, etl, json
+import lstm, etl
+
 import numpy as np
 import pandas as pd
-import h5py
+
+import matplotlib as mpl
+mpl.use('TkAgg')
 import matplotlib.pyplot as plt
-configs = json.loads(open('configs.json').read())
+
+configs = json.loads(open('config.json').read())
+
 tstart = time.time()
 
 def plot_results(predicted_data, true_data):
