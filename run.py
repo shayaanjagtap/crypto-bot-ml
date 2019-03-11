@@ -89,12 +89,14 @@ data_gen_train = dl.generate_clean_data(
 with h5py.File(configs['data']['filename_clean'], 'r') as hf:
     nrows = hf['x'].shape[0]
     ncols = hf['x'].shape[2]
+    print(ncols)
+    print(hf['x'].shape)
 
 ntrain = int(configs['data']['train_test_split'] * nrows)
 steps_per_epoch = int((ntrain / configs['model']['epochs']) / configs['data']['batch_size'])
 print('> Clean data has', nrows, 'data rows. Training on', ntrain, 'rows with', steps_per_epoch, 'steps-per-epoch')
 
-model = lstm.build_network([ncols, 150, 150, 1])
+model = lstm.build_network(layers=[ncols, 150, 150, 1])
 t = threading.Thread(target=fit_model_threaded, args=[model, data_gen_train, steps_per_epoch, configs])
 t.start()
 

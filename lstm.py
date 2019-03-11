@@ -13,7 +13,7 @@ def build_network(layers):
     model = Sequential()
 
     model.add(LSTM(
-        input_dim=layers[0],
+        input_shape=layers[0],
         output_dim=layers[1],
         return_sequences=True))
     model.add(Dropout(0.2))
