@@ -1,4 +1,4 @@
-# Cryptocurreny HFT Bot #
+# Cryptocurrency HFT Bot #
 
 A relatively simple high frequency trading bot build to handle the volatile nature of cryptocurrency,
 
