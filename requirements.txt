@@ -1,6 +1,6 @@
 absl-py==0.7.0
 aiodns==1.1.1
-aiohttp==3.5.4
+aiohttp==3.7.4
 asn1crypto==0.24.0
 astor==0.7.1
 async-timeout==3.0.1
